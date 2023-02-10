@@ -1,5 +1,7 @@
 """
-Coffee application. 
+Coffee application. Flask uses the MTV (Model, Template, Views) architecture 
+instead of MVC (Model, View, Controller). 
+To learn more visit: https://flask.palletsprojects.com/en/2.2.x/
 """
 
 from flask import Blueprint
