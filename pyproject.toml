@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "my-app"
+version = "0.1.0"
+description = "A starter, boilerplate repo for all new Python-Flask projects."
+authors = ["Justino Mora <justino@emersoncollective.com>"]
+readme = "README.md"
+packages = [{include = "my_app"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+flask = "^2.2.2"
+python-dotenv = "^0.21.1"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.15.10"
+black = {version = "^23.1a1", allow-prereleases = true}
+mypy = "^0.991"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
