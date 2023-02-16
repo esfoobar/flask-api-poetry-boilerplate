@@ -12,7 +12,8 @@
 ## Running the application
 
 - Start a terminal
-- Then run `poetry run flas run`
+- Copy the `.flaskenv.sample` to `.flaskenv`
+- Then run `poetry run flask run`
 
 ## Working with VSCode
 
