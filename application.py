@@ -8,7 +8,7 @@ from flask import Flask
 from coffee.views import coffee_app
 
 
-def create_app(**config_overrides: dict[str, Any]) -> Flask:
+def create_app(**config_overrides: Any) -> Any:
     """
     Factory application creator
     args: config_overrides = testing overrides

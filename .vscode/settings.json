@@ -1,0 +1,22 @@
+{
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+      "--line-length=80"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": false,
+    "python.linting.pylintEnabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyArgs": [
+        "--ignore-missing-imports",
+        "--follow-imports=silent",
+        "--show-column-numbers",
+        "--strict"
+      ],    
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+      "-s",
+      "."
+    ],
+    "python.testing.unittestEnabled": false,
+  }

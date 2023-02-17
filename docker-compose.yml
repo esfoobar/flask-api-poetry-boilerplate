@@ -1,0 +1,15 @@
+version: "2"
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/coffee_app
+    container_name: coffee_app_web_1
+    stdin_open: true
+    tty: true
+    environment:
+      FLASK_APP: manage.py
+      FLASK_DEBUG: 1
+      SECRET_KEY: "an-important-secret"
