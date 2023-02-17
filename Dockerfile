@@ -17,7 +17,7 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=on
 # Install poetry
 RUN pip3 install poetry
 
-# set "counter_app" as the working directory from which CMD, RUN, ADD references
+# set "my_app" as the working directory from which CMD, RUN, ADD references
 WORKDIR /my_app
 
 # setup poetry
