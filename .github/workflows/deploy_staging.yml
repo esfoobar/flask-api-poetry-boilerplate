@@ -1,0 +1,55 @@
+name: Deploy Staging
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**"
+env:
+  PR_NUMBER: ${{github.event.pull_request.number}}
+  SHA_NUMBER: ${{github.event.pull_request.head.sha}}
+jobs:
+  generate-staging:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Print variables to help debug
+        uses: hmarr/debug-action@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -U wheel
+      - name: Load cached Poetry installation
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: env-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ hashFiles('.github/workflows/deploy_be_staging.yml') }}
+      - name: Install poetry
+        uses: snok/install-poetry@v1.3.3
+      - name: Print Poetry settings
+        run: poetry show -v
+      - name: Install dependencies
+        run: poetry install
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      - name: Run Black
+        run: |
+          poetry run black --check --line-length=80 .
+      - name: Run mypy
+        run: |
+          poetry run mypy --ignore-missing-imports .
+      - name: Run tests
+        run: |
+          poetry run pytest
+        env:
+          FLASK_APP: manage.py
+          FLASK_ENV: testing
+          SECRET_KEY: an-important-secret
