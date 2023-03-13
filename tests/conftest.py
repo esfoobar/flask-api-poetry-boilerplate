@@ -2,18 +2,18 @@
 Pytest Configuration File
 """
 
+from typing import Any
 import pytest
 from dotenv import load_dotenv
-from typing import Any
 
 # This needs to go above the create_app import
 load_dotenv(".flaskenv")
 
-from application import create_app
+from application import create_app  # pylint: disable=wrong-import-position
 
 
-@pytest.fixture
-def create_test_app() -> Any:
+@pytest.fixture(name="create_test_app")
+def create_test_app_fixture() -> Any:
     """
     Creates factory app
     """
