@@ -12,6 +12,7 @@
 ## Running the application
 
 - Start a terminal
+- Navigate to the `coffee_app` directory
 - Copy the `.flaskenv.sample` to `.flaskenv`
 - Then run `poetry run flask run`
 
