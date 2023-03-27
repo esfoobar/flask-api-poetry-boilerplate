@@ -10,6 +10,7 @@ env:
   SHA_NUMBER: ${{github.event.pull_request.head.sha}}
 jobs:
   generate-staging:
+    name: Deploy Staging
     runs-on: ubuntu-latest
     strategy:
       matrix:
