@@ -5,7 +5,7 @@ Main Flask Application
 from typing import Any
 from flask import Flask
 
-from coffee_app.coffee.views import coffee_app
+from my_app.home_app.views import home_app
 
 
 def create_app(**config_overrides: Any) -> Any:
@@ -23,6 +23,6 @@ def create_app(**config_overrides: Any) -> Any:
     app.config.update(config_overrides)
 
     # register blueprints
-    app.register_blueprint(coffee_app)
+    app.register_blueprint(home_app)
 
     return app

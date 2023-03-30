@@ -10,9 +10,10 @@
         "request": "launch",
         "module": "flask",
         "env": {
-          "FLASK_APP": "manage.py",
+          "FLASK_APP": "${workspaceRoot}/my_app/manage.py",
           "FLASK_DEBUG": "1"
         },
+        "envFile": "${workspaceFolder}/my_app/.flaskenv",                
         "args": [
           "run",
           "--host",
