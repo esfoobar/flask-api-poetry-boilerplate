@@ -5,7 +5,7 @@ Main Flask Application
 from typing import Any
 from flask import Flask
 
-from coffee.views import coffee_app
+from coffee_app.coffee.views import coffee_app
 
 
 def create_app(**config_overrides: Any) -> Any:

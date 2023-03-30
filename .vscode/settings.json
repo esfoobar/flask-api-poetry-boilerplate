@@ -11,6 +11,7 @@
         "--ignore-missing-imports",
         "--follow-imports=silent",
         "--show-column-numbers",
+        "--explicit-package-bases",
         "--strict"
       ],    
     "python.testing.pytestEnabled": true,

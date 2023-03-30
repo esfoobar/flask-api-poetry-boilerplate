@@ -42,7 +42,7 @@ jobs:
           poetry run black --check --line-length=80 .
       - name: Run mypy
         run: |
-          poetry run mypy --ignore-missing-imports .
+          poetry run mypy --ignore-missing-imports --explicit-package-bases .
       - name: Run pylint
         run: |
           poetry run pylint **/*.py
