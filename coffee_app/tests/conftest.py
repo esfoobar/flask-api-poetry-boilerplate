@@ -9,7 +9,11 @@ from dotenv import load_dotenv
 # This needs to go above the create_app import
 load_dotenv(".flaskenv")
 
-from application import create_app  # pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position
+# We need this file to be under the load_dotenv call
+from coffee_app.application import (
+    create_app,
+)
 
 
 @pytest.fixture(name="create_test_app")
