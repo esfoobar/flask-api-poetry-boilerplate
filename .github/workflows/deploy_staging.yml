@@ -4,13 +4,17 @@ on:
     branches:
       - main
     paths:
-      - "**"
+      - "my-app/**"
 env:
   PR_NUMBER: ${{github.event.pull_request.number}}
   SHA_NUMBER: ${{github.event.pull_request.head.sha}}
 jobs:
   generate-staging:
+    name: Deploy Flask Boilerplate staging
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: my-app
     strategy:
       matrix:
         python-version: ["3.10"]
