@@ -49,7 +49,7 @@ jobs:
           poetry run mypy --ignore-missing-imports --explicit-package-bases .
       - name: Run pylint
         run: |
-          poetry run pylint my-app/*.py
+          poetry run pylint my_app/*.py
       - name: Run tests
         run: |
           poetry run pytest
