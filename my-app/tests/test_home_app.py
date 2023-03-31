@@ -3,7 +3,12 @@ Home App Tests
 """
 
 
-def test_initial_response(create_test_client, create_test_app) -> None:
+from typing import Any
+
+
+def test_initial_response(
+    create_test_client: Any, create_test_app: Any
+) -> None:
     """
     Test app's response
     """

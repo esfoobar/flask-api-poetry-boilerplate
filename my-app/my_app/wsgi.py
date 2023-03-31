@@ -1,9 +1,9 @@
 # Set the path
-import os, sys
+import os, sys  # noqa
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from my_app.application import create_app
+from my_app.application import create_app  # noqa
 
 app = create_app()
 
