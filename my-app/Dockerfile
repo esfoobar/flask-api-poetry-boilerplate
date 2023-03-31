@@ -42,4 +42,4 @@ RUN poetry config virtualenvs.create true \
 EXPOSE 5000
 
 # Define our command to be run when launching the container
-CMD poetry run gunicorn my_app.manage:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance
+CMD poetry run gunicorn my_app.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance
