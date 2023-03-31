@@ -4,7 +4,7 @@ instead of MVC (Model, View, Controller).
 To learn more visit: https://flask.palletsprojects.com/en/2.2.x/
 """
 
-from flask import Blueprint
+from flask import Blueprint, current_app
 
 # This defines a "home_app" Blueprint for how to construct or extend the main application.
 # To learn more go to: https://flask.palletsprojects.com/en/2.2.x/blueprints/
@@ -17,4 +17,8 @@ def home() -> str:
     The home page for a home type
     """
 
-    return "<h3>Home: Hello World!</h3>"
+    return (
+        "<h3>Home: Hello World!</h3>"
+        + f"<p>{current_app.config.ENV_FOR_DYNACONF}</p>"  # type: ignore
+        + f"<p>{current_app.config.DB_HOST}</p>"  # type: ignore
+    )
