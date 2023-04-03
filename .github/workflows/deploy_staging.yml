@@ -4,17 +4,17 @@ on:
     branches:
       - main
     paths:
-      - "my-app/**"
+      - "my-api/**"
 env:
   PR_NUMBER: ${{github.event.pull_request.number}}
   SHA_NUMBER: ${{github.event.pull_request.head.sha}}
 jobs:
   generate-staging:
-    name: Deploy Flask Boilerplate staging
+    name: Deploy Flask API Boilerplate staging
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: my-app
+        working-directory: my-api
     strategy:
       matrix:
         python-version: ["3.10"]
@@ -49,7 +49,7 @@ jobs:
           poetry run mypy --ignore-missing-imports --explicit-package-bases .
       - name: Run pylint
         run: |
-          poetry run pylint my_app/*.py
+          poetry run pylint my_api/*.py
       - name: Run tests
         run: |
           poetry run pytest
