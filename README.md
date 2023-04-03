@@ -28,4 +28,5 @@
 
 ## Working with Docker
 
-- From the root directory just type `docker-compose up`
+- To run the applcation, from the root directory just type `docker-compose up`
+- To run tests, run `docker run --rm -it flask-poetry-boilerplate poetry run pytest`

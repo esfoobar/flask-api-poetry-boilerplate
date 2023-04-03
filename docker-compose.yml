@@ -1,12 +1,13 @@
 version: "2"
 services:
   web:
+    image: flask-poetry-boilerplate
+    container_name: my_app_web_1
     build: my-app/.
     ports:
       - "5000:5000"
     volumes:
       - ./:/my-app
-    container_name: my_app_web_1
     stdin_open: true
     tty: true
     environment:
