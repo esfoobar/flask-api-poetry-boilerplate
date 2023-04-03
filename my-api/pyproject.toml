@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "my-app"
+name = "my-api"
 version = "0.1.0"
-description = "A starter, boilerplate repo for all new Python-Flask projects."
+description = "A starter, boilerplate repo for all new Python-Flask API projects."
 authors = ["Justino Mora <justino@emersoncollective.com>", "Jorge Escobar <jorge@emersoncollective.com>"]
-packages = [{include = "my_app"}]
+packages = [{include = "my_api"}]
 
 [tool.poetry.dependencies]
 python = "~3.10"
@@ -11,6 +11,9 @@ flask = "^2.2.2"
 pytest = "^7.2.1"
 gunicorn = "^20.1.0"
 dynaconf = "^3.1.12"
+psycopg2-binary = "^2.9.6"
+flask-migrate = "^4.0.4"
+flask-sqlalchemy = "^3.0.3"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.10"

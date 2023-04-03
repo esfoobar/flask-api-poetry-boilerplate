@@ -1,15 +1,25 @@
 version: "2"
 services:
   web:
-    image: flask-poetry-boilerplate
-    container_name: my_app_web_1
-    build: my-app/.
+    image: flask-api-poetry-boilerplate
+    container_name: my_api_web_1
+    build: my-api/.
     ports:
       - "5000:5000"
     volumes:
-      - ./:/my-app
+      - ./:/my-api
     stdin_open: true
     tty: true
     environment:
       ENV_FOR_DYNACONF: development
       PYTHONUNBUFFERED: 1
+  db:
+    image: postgres:13-alpine
+    container_name: my_api_db_1
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_password
+      POSTGRES_DB: app

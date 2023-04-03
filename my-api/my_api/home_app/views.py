@@ -20,5 +20,5 @@ def home() -> str:
     return (
         "<h3>Home: Hello World!</h3>"
         + f"<p>Dynaconf Environment: {current_app.config.ENV_FOR_DYNACONF}</br>"  # type: ignore
-        + f"DB_HOST: {current_app.config.DB_HOST}</p>"  # type: ignore
+        + f"DATABASE_NAME: {current_app.config.DATABASE_NAME}</p>"  # type: ignore
     )
