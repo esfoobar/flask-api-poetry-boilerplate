@@ -8,9 +8,18 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     wget \
+    openssl \
+    libssl-dev \
     python3-dev \
     python3-pip \
     python-is-python3 
+
+# Install Python 3.10
+RUN wget https://www.python.org/ftp/python/3.10.0/Python-3.10.0.tgz \
+    && tar -xvf Python-3.10.0.tgz \
+    && cd Python-3.10.0 \
+    && ./configure --enable-optimizations \
+    && make altinstall
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on
 
@@ -20,17 +29,17 @@ RUN pip3 install poetry
 # set "my_app" as the working directory from which CMD, RUN, ADD references
 WORKDIR /my_app
 
+# now copy all the files in this directory to /code
+COPY . .
+
 # setup poetry
 COPY pyproject.toml /my_app/
 RUN poetry config virtualenvs.create true \
     && poetry config virtualenvs.in-project false \
     && poetry install --no-interaction
 
-# now copy all the files in this directory to /code
-COPY . .
-
 # Listen to port 5000 at runtime
 EXPOSE 5000
 
 # Define our command to be run when launching the container
-CMD poetry run flask run --host 0.0.0.0
+CMD poetry run gunicorn my_app.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance

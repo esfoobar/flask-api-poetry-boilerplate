@@ -3,13 +3,14 @@ name = "my-app"
 version = "0.1.0"
 description = "A starter, boilerplate repo for all new Python-Flask projects."
 authors = ["Justino Mora <justino@emersoncollective.com>", "Jorge Escobar <jorge@emersoncollective.com>"]
-readme = "README.md"
+packages = [{include = "my_app"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "~3.10"
 flask = "^2.2.2"
-python-dotenv = "^0.21.1"
 pytest = "^7.2.1"
+gunicorn = "^20.1.0"
+dynaconf = "^3.1.12"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.10"

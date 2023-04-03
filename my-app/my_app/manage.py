@@ -1,6 +1,6 @@
 """
 The entry point to our Python Flask application.
 """
-from application import create_app
+from my_app.application import create_app
 
 app = create_app()

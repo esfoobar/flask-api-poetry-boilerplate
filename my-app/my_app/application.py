@@ -4,8 +4,10 @@ Main Flask Application
 
 from typing import Any
 from flask import Flask
+from dynaconf import FlaskDynaconf
 
-from coffee.views import coffee_app
+
+from my_app.home_app.views import home_app
 
 
 def create_app(**config_overrides: Any) -> Any:
@@ -17,12 +19,12 @@ def create_app(**config_overrides: Any) -> Any:
     app = Flask(__name__)
 
     # Load config
-    app.config.from_pyfile("settings.py")
+    FlaskDynaconf(app, **config_overrides)
 
     # apply overrides for tests
     app.config.update(config_overrides)
 
     # register blueprints
-    app.register_blueprint(coffee_app)
+    app.register_blueprint(home_app)
 
     return app

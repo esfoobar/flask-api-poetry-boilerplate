@@ -1,0 +1,13 @@
+[default]
+SECRET_KEY = "you-will-never-guess"
+
+[development]
+DB_HOST = "development-db"
+
+[testing]
+TESTING = true
+DB_HOST = "testing-db"
+
+[staging]
+
+[production]
