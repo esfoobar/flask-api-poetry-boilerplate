@@ -15,4 +15,6 @@ def test_initial_response(
     response = create_test_client.get("/")
     body = response.get_data()
     assert "Hello World!" in str(body)
+    assert create_test_app.config.TESTING is True
+    assert create_test_app.config.ENV_FOR_DYNACONF == "testing"
     assert create_test_app.config.DB_HOST == "testing-db"
