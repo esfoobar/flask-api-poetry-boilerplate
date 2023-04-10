@@ -4,7 +4,7 @@ User schema
 
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
-from my_api.api_1_0.user.models import User
+from .models import User
 
 
 class UserSchema(SQLAlchemyAutoSchema):

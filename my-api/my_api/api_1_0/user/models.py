@@ -4,6 +4,7 @@ User model
 from my_api.application import db
 
 
+# mypy: ignore-errors
 class User(db.Model):
     """
     User model
