@@ -2,9 +2,8 @@
 User API resources
 """
 
-from typing import Tuple
+from typing import Any, Tuple
 from flask_restx import Resource, Namespace
-from werkzeug.exceptions import BadRequest
 from marshmallow.exceptions import ValidationError
 
 from my_api.application import db
@@ -14,23 +13,23 @@ api = Namespace("user", description="User API")
 
 
 @api.route("/")
-class UsersEndpoint(Resource):
+class UserResource(Resource):  # type: ignore
     """
     Endpoints for User API
     """
 
-    def post(self) -> Tuple[dict, int]:
+    def post(self) -> Tuple[dict[str, Any], int]:
         """Create new user"""
 
-        user_schema = UserSchema()
+        user_schema = UserSchema()  # type: ignore
         try:
-            result = user_schema.load(api.payload, session=db.session)
+            result = user_schema.load(api.payload, session=db.session)  # type: ignore
         except ValidationError as err:
-            e = BadRequest()
-            e.description = {
+            request_error = {
                 "errors": err.messages,
                 "message": "VALIDATION_ERROR",
             }
-            raise e
+            return request_error, 400
         message = "User created"
+        print(result)
         return {"message": message}, 201
