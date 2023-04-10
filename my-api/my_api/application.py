@@ -8,7 +8,7 @@ from dynaconf import FlaskDynaconf
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-from my_api.home_app.views import home_app
+from my_api.api_1_0.api import home_app
 
 # setup db
 db = SQLAlchemy()
@@ -32,7 +32,10 @@ def create_app(**config_overrides: Any) -> Any:
     db.init_app(app)
     Migrate(app, db)
 
+    # import blueprints
+    from api_1_0.api import api_1_0_app
+
     # register blueprints
-    app.register_blueprint(home_app)
+    app.register_blueprint(api_1_0_app, url_prefix="/v1.0")
 
     return app
