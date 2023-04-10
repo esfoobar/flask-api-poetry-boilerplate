@@ -27,6 +27,9 @@ mypy = "^0.991"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.pyling]
+ignore = migrations
+
 [tool.pylint."MESSAGE CONTROL"]
 disable = [
     "C0415", # Disable Import outside toplevel
