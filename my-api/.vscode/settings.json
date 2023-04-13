@@ -6,7 +6,7 @@
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": false,
     "python.linting.pylintEnabled": true,
-    "python.linting.mypyEnabled": true,
+    "python.linting.mypyEnabled": false,
     "python.linting.mypyArgs": [
         "--ignore-missing-imports",
         "--follow-imports=silent",

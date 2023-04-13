@@ -2,16 +2,15 @@
 Api v1 namespace entrypoint
 """
 
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask_restx import Api
+from marshmallow import ValidationError
 
-from my_api.api_1_0.user.resources import api as user_ns
+from .user.resources import user_ns, User, UserList
+
 
 api_1_0_app = Blueprint("api_1_0", __name__)
 
-authorizations = {
-    "apikey": {"type": "apiKey", "in": "header", "name": "Authorization"}
-}
 
 api = Api(
     api_1_0_app,
@@ -19,7 +18,16 @@ api = Api(
     title="Boilerplate API",
     description="Boilerplate API Platform",
     validate=True,
-    # authorizations=authorizations,
 )
 
-api.add_namespace(ns=user_ns, path="/users")
+
+@api.errorhandler(ValidationError)
+def handle_validation_error(error):
+    """Handle marshmallow validation errors"""
+    return jsonify(error.messages), 400
+
+
+# User resources
+api.add_namespace(user_ns)
+user_ns.add_resource(User, "/<int:id>")
+user_ns.add_resource(UserList, "")

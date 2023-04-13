@@ -4,8 +4,8 @@ User model
 from my_api.application import db
 
 
-class User(db.Model):  # type: ignore
-    # Flask-SqlAlchemy still has no type hints
+class UserModel(db.Model):
+
     """
     User model
     """
