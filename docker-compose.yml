@@ -8,6 +8,8 @@ services:
       - "5000:5000"
     volumes:
       - ./:/my-api
+    depends_on:
+      - db
     stdin_open: true
     tty: true
     environment:
