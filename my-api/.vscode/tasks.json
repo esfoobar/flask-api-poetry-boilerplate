@@ -41,7 +41,7 @@
         "args": [
           "exec",
           "-it",
-          "app_db_1",
+          "my_api_db_1",
           "psql",
           "postgres",
           "-U",
