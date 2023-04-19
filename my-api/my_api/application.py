@@ -7,6 +7,7 @@ from flask import Flask
 from dynaconf import FlaskDynaconf
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
 
 # setup db
 db = SQLAlchemy()
@@ -25,6 +26,10 @@ def create_app(**config_overrides: Any) -> Any:
 
     # apply overrides for tests
     app.config.update(config_overrides)
+
+    # setup JWT
+    # pylint: disable=unused-variable
+    jwt = JWTManager(app)
 
     # initialize db
     db.init_app(app)
