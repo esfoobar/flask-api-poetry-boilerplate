@@ -3,12 +3,14 @@ User API resources
 """
 
 from flask import request
-from flask_restx import Resource, Namespace, fields
+from flask_restx import Resource, Namespace, fields, reqparse
 from passlib.hash import pbkdf2_sha256
 
 from my_api.application import db
+from my_api.api_1_0.utils import paginate_metadata_object
 from .models import UserModel
 from .schema import UserSchema
+
 
 user_ns = Namespace("users", description="User API")
 
@@ -42,6 +44,23 @@ user_login_model = user_ns.model(
         "username": fields.String(),
         "password": fields.String(),
     },
+)
+
+# pagination params
+parser = reqparse.RequestParser()
+parser.add_argument(
+    "users_per_page",
+    type=int,
+    help="Number of users per page",
+    default=10,
+    required=False,
+)
+parser.add_argument(
+    "page",
+    type=int,
+    help="Current page",
+    default=1,
+    required=False,
 )
 
 
@@ -116,10 +135,19 @@ class UserList(Resource):
     Endpoints for User API
     """
 
+    @user_ns.expect(parser)
     @user_ns.doc("Get all the Users")
     def get(self):
         """Get all users"""
-        return user_list_schema.dump(UserModel.query.all()), 200
+        args = parser.parse_args()
+        user_list = UserModel.query.paginate(
+            page=args.page, per_page=args.users_per_page
+        )
+
+        return {
+            "_meta": paginate_metadata_object(user_list),
+            "users": user_list_schema.dump(user_list),
+        }, 200
 
     @user_ns.expect(user_post_model)
     @user_ns.doc("Create a User")
