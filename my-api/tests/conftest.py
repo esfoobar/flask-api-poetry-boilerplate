@@ -5,7 +5,7 @@ Pytest Configuration File
 from typing import Any
 import pytest
 
-from my_app.application import (
+from my_api.application import (
     create_app,
 )
 

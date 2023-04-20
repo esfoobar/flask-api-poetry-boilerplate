@@ -26,14 +26,14 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=on
 # Install poetry
 RUN pip3 install poetry
 
-# set "my_app" as the working directory from which CMD, RUN, ADD references
-WORKDIR /my_app
+# set "my_api" as the working directory from which CMD, RUN, ADD references
+WORKDIR /my_api
 
 # now copy all the files in this directory to /code
 COPY . .
 
 # setup poetry
-COPY pyproject.toml /my_app/
+COPY pyproject.toml /my_api/
 RUN poetry config virtualenvs.create true \
     && poetry config virtualenvs.in-project false \
     && poetry install --no-interaction
@@ -42,4 +42,4 @@ RUN poetry config virtualenvs.create true \
 EXPOSE 5000
 
 # Define our command to be run when launching the container
-CMD poetry run gunicorn my_app.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance
+CMD poetry run gunicorn my_api.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance
