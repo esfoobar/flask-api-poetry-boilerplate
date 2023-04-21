@@ -1,5 +1,8 @@
 FROM ubuntu:20.04
 
+ENV TZ=America//Los_Angeles
+ENV DEBIAN_FRONTEND noninteractive
+
 # Install packages
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -10,9 +13,9 @@ RUN apt-get update && apt-get install -y \
     wget \
     openssl \
     libssl-dev \
+    libffi-dev \
     python3-dev \
-    python3-pip \
-    python-is-python3 
+    python3-pip
 
 # Install Python 3.10
 RUN wget https://www.python.org/ftp/python/3.10.0/Python-3.10.0.tgz \
@@ -20,6 +23,12 @@ RUN wget https://www.python.org/ftp/python/3.10.0/Python-3.10.0.tgz \
     && cd Python-3.10.0 \
     && ./configure --enable-optimizations \
     && make altinstall
+
+# Set Python3 to be default
+RUN apt-get install -y software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get update
+RUN update-alternatives --install /usr/bin/python python /usr/local/bin/python3.10 1
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on
 
@@ -34,7 +43,7 @@ COPY . .
 
 # setup poetry
 COPY pyproject.toml /my_api/
-RUN poetry config virtualenvs.create true \
+RUN poetry env use 3.10 && poetry config virtualenvs.create true \
     && poetry config virtualenvs.in-project false \
     && poetry install --no-interaction
 
@@ -42,4 +51,4 @@ RUN poetry config virtualenvs.create true \
 EXPOSE 5000
 
 # Define our command to be run when launching the container
-CMD poetry run gunicorn my_api.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance
+# CMD poetry run gunicorn my_api.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance
