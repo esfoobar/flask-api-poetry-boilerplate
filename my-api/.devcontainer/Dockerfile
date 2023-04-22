@@ -41,14 +41,5 @@ WORKDIR /my_api
 # now copy all the files in this directory to /code
 COPY . .
 
-# setup poetry
-# COPY pyproject.toml .
-# RUN poetry env use 3.10 && poetry config virtualenvs.create true \
-#     && poetry config virtualenvs.in-project false \
-#     && poetry install --no-interaction
-
 # Listen to port 5000 at runtime
 EXPOSE 5000
-
-# Define our command to be run when launching the container
-# CMD poetry run gunicorn my_api.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance
