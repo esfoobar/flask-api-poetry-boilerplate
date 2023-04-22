@@ -1,0 +1,25 @@
+version: '2'
+services:
+  web:
+    image: flask-api-poetry-boilerplate
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../..:/workspaces:cached    
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"  
+    environment:
+      ENV_FOR_DYNACONF: devcontainer
+    command: /bin/sh -c "while sleep 1000; do :; done"
+  db:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_password
+      POSTGRES_DB: app
+    ports:
+      - 5432:5432

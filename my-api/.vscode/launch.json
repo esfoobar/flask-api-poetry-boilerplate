@@ -11,8 +11,7 @@
       "module": "flask",
       "env": {
         "FLASK_APP": "${workspaceRoot}/my_api/manage.py",
-        "FLASK_DEBUG": "1",
-        "ENV_FOR_DYNACONF": "development"
+        "FLASK_DEBUG": "1"
       },
       "args": [
         "run",

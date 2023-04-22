@@ -1,17 +1,10 @@
 {
 	"name": "Flask API Local Docker Development",
-	"build": {
-		// Sets the run context to one level up instead of the .devcontainer folder.
-		"context": "..",
-		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-		"dockerfile": "../Dockerfile",
-	},
-	"runArgs": [
-		"-e",
-		"ENV_FOR_DYNACONF=devcontainer",
-		"--name",
-		"flask-api-boilerplate-devcontainer-app"
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"dockerComposeFile": [
+		"docker-compose.yml"
 	],
+	"service": "web",
 	"postCreateCommand": "poetry env use python3.10 && poetry install && poetry shell",
 	"customizations": {
 		"vscode": {
@@ -19,6 +12,6 @@
 				"ms-python.python"
 			]
 		},
-		"python.pythonPath": "/root/.cache/pypoetry/virtualenvs/my-api-wgyvS0---py3.10",
+		"python.pythonPath": "/root/.cache/pypoetry/virtualenvs/my-api-xFcrnxEn-py3.10/bin/python3.10",
 	}
 }
