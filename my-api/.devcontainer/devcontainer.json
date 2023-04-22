@@ -20,5 +20,8 @@
 			]
 		},
 		"python.pythonPath": "/root/.cache/pypoetry/virtualenvs/my-api-wgyvS0---py3.10",
-	}
+	},
+	"mounts": [
+		"source=${localWorkspaceFolder}/../.git,target=/workspace/.git,type=bind,consistency=cached"
+	]
 }
