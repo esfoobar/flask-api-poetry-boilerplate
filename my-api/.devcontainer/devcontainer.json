@@ -1,0 +1,17 @@
+{
+	"name": "Flask API Local Docker Development",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"dockerComposeFile": [
+		"docker-compose.yml"
+	],
+	"service": "web",
+	"postCreateCommand": "poetry env use python3.10 && poetry install && poetry shell",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python"
+			]
+		},
+		"python.pythonPath": "/root/.cache/pypoetry/virtualenvs/my-api-xFcrnxEn-py3.10/bin/python3.10",
+	}
+}
