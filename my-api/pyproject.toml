@@ -38,3 +38,8 @@ ignore-paths = [ "^my_api/migrations/.*$" ]
 disable = [
     "C0415", # Disable Import outside toplevel
 ]
+
+[tool.black]
+exclude = '''
+  /migrations/
+'''
