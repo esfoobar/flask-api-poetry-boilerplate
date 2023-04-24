@@ -19,7 +19,7 @@ def create_db():
     if settings.ENV_FOR_DYNACONF == "devcontainer":
         settings.configure(FORCE_ENV_FOR_DYNACONF="testing_devcontainer")
 
-    db_test_uri = settings.SQLALCHEMY_TEST_DATABASE_URI
+    db_test_uri = settings.SQLALCHEMY_DATABASE_URI
 
     # drop the database if it exists
     if database_exists(db_test_uri):
