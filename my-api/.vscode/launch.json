@@ -21,24 +21,6 @@
       "jinja": true
     },
     {
-      "name": "Poetry Flask Run",
-      "type": "python",
-      "request": "launch",
-      "module": "poetry",
-      "env": {
-        "FLASK_APP": "${workspaceRoot}/my_api/manage.py",
-        "FLASK_DEBUG": "1",
-        "ENV_FOR_DYNACONF": "development"
-      },
-      "args": [
-        "run",
-        "flask",
-        "run",
-        "--host",
-        "0.0.0.0",
-      ]
-    },
-    {
       "name": "Python: Test debug config",
       "type": "python",
       "request": "launch",
