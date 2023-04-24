@@ -9,8 +9,8 @@ from dynaconf import settings
 from my_api.application import create_app, db
 
 
-@pytest.fixture
-def create_db():
+@pytest.fixture(name="create_db")
+def fixture_create_db():
     """
     Create sqlalchemy connection and test datatabase
     """
@@ -36,8 +36,8 @@ def create_db():
     drop_database(db_test_uri)
 
 
-@pytest.fixture
-def create_test_app(create_db):
+@pytest.fixture(name="create_test_app")
+def fixture_create_test_app(create_db):
     """
     Create a test factory app
     """
