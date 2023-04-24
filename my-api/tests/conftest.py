@@ -3,7 +3,6 @@ Pytest Configuration File
 """
 
 import pytest
-from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database, drop_database, database_exists
 from dynaconf import settings
 
@@ -17,7 +16,8 @@ def create_db():
     """
     print("Creating db")
 
-    settings.configure(FORCE_ENV_FOR_DYNACONF="testing")
+    if settings.ENV_FOR_DYNACONF == "devcontainer":
+        settings.configure(FORCE_ENV_FOR_DYNACONF="testing_devcontainer")
 
     db_test_uri = settings.SQLALCHEMY_TEST_DATABASE_URI
 
