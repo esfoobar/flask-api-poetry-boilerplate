@@ -19,7 +19,7 @@ jobs:
       matrix:
         python-version: ["3.10"]
     services:
-      postgres:
+      db:
         image: postgres
         env:
           POSTGRES_USER: app_user
@@ -64,5 +64,3 @@ jobs:
       - name: Run tests
         run: |
           poetry run pytest
-        env:
-          DB_HOST: localhost
