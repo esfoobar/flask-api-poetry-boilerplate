@@ -114,7 +114,9 @@ class User(Resource):
             return {"message": "Username already exists"}, 400
 
         # check if email exists
-        if user_json.get("email") and check_email_exists(user_json.get("email")):
+        if user_json.get("email") and check_email_exists(
+            user_json.get("email")
+        ):
             return {"message": "Email already exists"}, 400
 
         # validate the fields
@@ -160,7 +162,9 @@ class UserList(Resource):
             return {"message": "Username already exists"}, 400
 
         # check if email exists
-        if user_json.get("email") and check_email_exists(user_json.get("email")):
+        if user_json.get("email") and check_email_exists(
+            user_json.get("email")
+        ):
             return {"message": "Email already exists"}, 400
 
         user_data = user_schema.load(user_json, session=db.session)
