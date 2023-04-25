@@ -49,7 +49,7 @@ def test_user_create(create_test_client):
     assert response.status_code == 400
     assert data["message"] == "Email already exists"
 
-    # missign username
+    # missing username
     test_user = user_dict()
     del test_user["username"]
     response = send_post_request(create_test_client, test_user)
