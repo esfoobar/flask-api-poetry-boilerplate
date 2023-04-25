@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     openssl \
     libssl-dev \
     libffi-dev \
+    postgresql-client \
     python3-dev \
     python3-pip
 
@@ -51,4 +52,4 @@ RUN poetry env use 3.10 && poetry config virtualenvs.create true \
 EXPOSE 5000
 
 # Define our command to be run when launching the container
-# CMD poetry run gunicorn my_api.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance
+CMD poetry run gunicorn my_api.wsgi:app -b 0.0.0.0:5000 --capture-output --enable-stdio-inheritance

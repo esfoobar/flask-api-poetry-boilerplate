@@ -13,7 +13,7 @@ services:
     stdin_open: true
     tty: true
     environment:
-      ENV_FOR_DYNACONF: development
+      ENV_FOR_DYNACONF: docker
       PYTHONUNBUFFERED: 1
   db:
     image: postgres:13-alpine

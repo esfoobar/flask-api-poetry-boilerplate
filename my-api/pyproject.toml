@@ -14,11 +14,13 @@ dynaconf = "^3.1.12"
 psycopg2-binary = "^2.9.6"
 flask-migrate = "^4.0.4"
 flask-sqlalchemy = "^3.0.3"
+sqlalchemy-utils = "^0.41.0"
 marshmallow = "^3.19.0"
 marshmallow-sqlalchemy = "^0.29.0"
 flask-restx = "^1.1.0"
 flask-jwt-extended = "^4.4.4"
 passlib = "^1.7.4"
+
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.10"
@@ -36,3 +38,8 @@ ignore-paths = [ "^my_api/migrations/.*$" ]
 disable = [
     "C0415", # Disable Import outside toplevel
 ]
+
+[tool.black]
+exclude = '''
+  /migrations/
+'''

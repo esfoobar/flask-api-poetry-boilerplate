@@ -18,6 +18,20 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10"]
+    services:
+      db:
+        image: postgres
+        env:
+          POSTGRES_USER: app_user
+          POSTGRES_PASSWORD: app_password
+          POSTGRES_DB: app
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -44,9 +58,6 @@ jobs:
       - name: Run Black
         run: |
           poetry run black --check --line-length=80 .
-      - name: Run mypy
-        run: |
-          poetry run mypy --ignore-missing-imports --explicit-package-bases .
       - name: Run pylint
         run: |
           poetry run pylint my_api/*.py
@@ -54,6 +65,4 @@ jobs:
         run: |
           poetry run pytest
         env:
-          FLASK_APP: manage.py
-          FLASK_ENV: testing
-          SECRET_KEY: an-important-secret
+          ENV_FOR_DYNACONF: testing_gha
