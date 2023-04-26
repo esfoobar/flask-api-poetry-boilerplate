@@ -13,7 +13,8 @@ class UserSchema(SQLAlchemyAutoSchema):
     User schema
     """
 
-    password = fields.String(load_only=True)
+    user_uid = fields.String(dump_only=True)  # read-only field
+    password = fields.String(load_only=True)  # write-only field
 
     class Meta:
         """
