@@ -12,7 +12,7 @@ services:
     ports:
       - "5000:5000"  
     environment:
-      ENV_FOR_DYNACONF: devcontainer
+      ENV_FOR_DYNACONF: docker
     command: /bin/sh -c "while sleep 1000; do :; done"
   db:
     image: postgres:13-alpine

@@ -14,7 +14,6 @@ SQLALCHEMY_DATABASE_URI = "@jinja postgresql://{{ this.DB_USERNAME }}:{{ this.DB
 
 [devcontainer]
 DB_HOST = "db" 
-DATABASE_NAME = "app"
 SQLALCHEMY_DATABASE_URI = "@jinja postgresql://{{ this.DB_USERNAME }}:{{ this.DB_PASSWORD }}@{{ this.DB_HOST }}:5432/{{ this.DATABASE_NAME }}"
 
 [testing_devcontainer]
