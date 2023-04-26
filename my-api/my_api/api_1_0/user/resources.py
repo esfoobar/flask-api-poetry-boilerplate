@@ -142,7 +142,6 @@ class UserList(Resource):
     """
 
     @user_ns.expect(parser)
-    @user_ns.doc("Get all the Users")
     def get(self):
         """Get all users"""
         args = parser.parse_args()
@@ -156,7 +155,6 @@ class UserList(Resource):
         }, 200
 
     @user_ns.expect(user_post_model)
-    @user_ns.doc("Create a User")
     def post(self):
         """Create new user"""
         user_json = request.get_json()
@@ -185,10 +183,16 @@ class UserLogin(Resource):
     """User login resource"""
 
     @user_ns.expect(user_login_model)
-    @user_ns.doc("Login a User")
     def post(self):
         """Login user"""
         user_json = request.get_json()
+
+        # Flask RestX won't handle missing data if there's no marshmallow load
+        # So we need to check for missing data manually
+        if not user_json.get("username"):
+            return {"message": "Missing username parameter"}, 400
+        if not user_json.get("password"):
+            return {"message": "Missing password parameter"}, 400
 
         # check if user exists in database
         user = UserModel.query.filter_by(username=user_json["username"]).first()
@@ -198,22 +202,21 @@ class UserLogin(Resource):
         # check if password is correct
         if not pbkdf2_sha256.verify(user_json["password"], user.password):
             return {"message": "Invalid credentials"}, 401
-        else:
-            # create jwt access token
-            access_token = create_access_token(identity=user.email, fresh=True)
-            refresh_token = create_refresh_token(identity=user.email)
 
-            response = jsonify(
-                {
-                    "id": user.user_id,
-                    "access_token": access_token,
-                    "refresh_token": refresh_token,
-                }
-            )
+        # create jwt access token
+        access_token = create_access_token(identity=user.email, fresh=True)
+        refresh_token = create_refresh_token(identity=user.email)
 
-            set_access_cookies(response, access_token)
-            set_refresh_cookies(response, refresh_token)
+        response = jsonify(
+            {
+                "id": user.user_id,
+                "access_token": access_token,
+                "refresh_token": refresh_token,
+            }
+        )
 
-            response.status_code = 200
+        set_access_cookies(response, access_token)
+        set_refresh_cookies(response, refresh_token)
 
-            return response
+        response.status_code = 200
+        return response
