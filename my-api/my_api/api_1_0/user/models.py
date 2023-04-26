@@ -1,6 +1,8 @@
 """
 User model
 """
+import uuid
+
 from my_api.application import db
 
 
@@ -17,7 +19,7 @@ class UserModel(db.Model):
         db.String,
         unique=True,
         nullable=False,
-        default=db.func.uuid_generate_v4(),
+        default=str(uuid.uuid4()),
     )
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)

@@ -88,16 +88,16 @@ def check_username_exists(username):
 class User(Resource):
     """Individual User endpoints"""
 
-    def get(self, user_id):
+    def get(self, user_uuid):
         """Get user by id"""
-        user_data = UserModel.query.get(user_id)
+        user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         if user_data:
             return user_schema.dump(user_data)
         return {"message": "User not found"}, 404
 
-    def delete(self, user_id):
+    def delete(self, user_uuid):
         """Delete user by id"""
-        user_data = UserModel.query.get(user_id)
+        user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         if user_data:
             db.session.delete(user_data)
             db.session.commit()
@@ -105,9 +105,9 @@ class User(Resource):
         return {"message": "User not found"}, 404
 
     @user_ns.expect(user_put_model)
-    def put(self, user_id):
+    def put(self, user_uuid):
         """Update user by id"""
-        user_data = UserModel.query.get(user_id)
+        user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         user_json = request.get_json()
 
         if not user_data:

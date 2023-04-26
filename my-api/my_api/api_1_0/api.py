@@ -29,6 +29,6 @@ def handle_validation_error(error):
 
 # User resources
 api.add_namespace(user_ns)
-user_ns.add_resource(User, "/<int:user_id>")
+user_ns.add_resource(User, "/<string:user_uuid>")
 user_ns.add_resource(UserList, "")
 user_ns.add_resource(UserLogin, "/login")
