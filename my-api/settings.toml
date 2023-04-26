@@ -3,6 +3,7 @@ SECRET_KEY = "you-will-never-guess"
 DB_USERNAME = "app_user"
 DB_PASSWORD = "app_password"
 DATABASE_NAME = "app"
+CORS_ORIGINS = "*"
 
 [development]
 DB_HOST = "localhost"

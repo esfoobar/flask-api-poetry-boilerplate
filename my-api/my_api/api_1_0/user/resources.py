@@ -2,9 +2,15 @@
 User API resources
 """
 
-from flask import request
+from flask import jsonify, request
 from flask_restx import Resource, Namespace, fields, reqparse
 from passlib.hash import pbkdf2_sha256
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    set_access_cookies,
+    set_refresh_cookies,
+)
 
 from my_api.application import db
 from my_api.api_1_0.utils import paginate_metadata_object
@@ -183,6 +189,31 @@ class UserLogin(Resource):
     def post(self):
         """Login user"""
         user_json = request.get_json()
-        user_data = user_schema.load(user_json, session=db.session)
 
-        return user_schema.dump(user_data), 201
+        # check if user exists in database
+        user = UserModel.query.filter_by(username=user_json["username"]).first()
+        if not user:
+            return {"message": "Invalid credentials"}, 401
+
+        # check if password is correct
+        if not pbkdf2_sha256.verify(user_json["password"], user.password):
+            return {"message": "Invalid credentials"}, 401
+        else:
+            # create jwt access token
+            access_token = create_access_token(identity=user.email, fresh=True)
+            refresh_token = create_refresh_token(identity=user.email)
+
+            response = jsonify(
+                {
+                    "id": user.user_id,
+                    "access_token": access_token,
+                    "refresh_token": refresh_token,
+                }
+            )
+
+            set_access_cookies(response, access_token)
+            set_refresh_cookies(response, refresh_token)
+
+            response.status_code = 200
+
+            return response
