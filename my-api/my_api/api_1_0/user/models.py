@@ -2,8 +2,19 @@
 User model
 """
 import uuid
+import enum
+from sqlalchemy import Enum
 
 from my_api.application import db
+
+
+class RoleEnum(enum.Enum):
+    """
+    User roles
+    """
+
+    ADMIN = "admin"
+    USER = "user"
 
 
 class UserModel(db.Model):
@@ -23,4 +34,8 @@ class UserModel(db.Model):
     )
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
+    role = db.Column(db.Integer, nullable=False, default=RoleEnum.USER.value)
     password = db.Column(db.String, nullable=False)
+
+    def __repr__(self):
+        return f"<User {UserModel.username}>"

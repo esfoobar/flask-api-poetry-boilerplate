@@ -24,3 +24,4 @@ class UserSchema(SQLAlchemyAutoSchema):
         model = UserModel
         include_relationships = True
         load_instance = True
+        exclude = ("user_id",)  # exclude user_id from serialization
