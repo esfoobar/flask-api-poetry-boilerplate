@@ -27,7 +27,7 @@ class UserSchema(SQLAlchemyAutoSchema):
             raise ValidationError("Invalid role value")
 
     @post_load
-    def load_role_name(self, data, **kwargs):
+    def load_role_name(self, data, **kwargs):  # pylint: disable=unused-argument
         """load role value"""
         role_enum = RoleEnum.__members__.get(data["role_name"].upper())
         data["role"] = role_enum.value if role_enum else None
