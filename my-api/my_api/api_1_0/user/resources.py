@@ -4,6 +4,7 @@ User API resources
 
 from flask import jsonify, request
 from flask_restx import Resource, Namespace, fields, reqparse
+from marshmallow import ValidationError
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import (
     create_access_token,
@@ -172,7 +173,11 @@ class UserList(Resource):
         ):
             return {"message": "Email already exists"}, 400
 
-        user_data = user_schema.load(user_json, session=db.session)
+        try:
+            user_data = user_schema.load(user_json, session=db.session)
+        except ValidationError as err:
+            return {"error": err.messages}, 400
+
         user_data.password = encode_password(user_data.password)
         db.session.add(user_data)
         db.session.commit()

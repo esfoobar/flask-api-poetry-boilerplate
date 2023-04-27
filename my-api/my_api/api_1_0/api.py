@@ -21,10 +21,10 @@ api = Api(
 )
 
 
-@api.errorhandler(ValidationError)
-def handle_validation_error(error):
-    """Handle marshmallow validation errors"""
-    return jsonify(error.messages), 400
+# @api.errorhandler(ValidationError)
+# def handle_validation_error(error):
+#     """Marshmallow validation error handler"""
+#     return jsonify(error.messages), 400
 
 
 # User resources
