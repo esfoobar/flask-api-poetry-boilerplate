@@ -3,7 +3,6 @@ User model
 """
 import uuid
 import enum
-from sqlalchemy import Enum
 
 from my_api.application import db
 
@@ -13,8 +12,8 @@ class RoleEnum(enum.Enum):
     User roles
     """
 
-    ADMIN = "admin"
-    USER = "user"
+    ADMIN = 0
+    USER = 1
 
 
 class UserModel(db.Model):

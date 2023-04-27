@@ -14,7 +14,7 @@ from flask_jwt_extended import (
 
 from my_api.application import db
 from my_api.api_1_0.utils import paginate_metadata_object
-from .models import UserModel
+from .models import UserModel, RoleEnum
 from .schema import UserSchema
 
 
@@ -30,6 +30,7 @@ user_post_model = user_ns.model(
         "username": fields.String(required=True),
         "email": fields.String(required=True),
         "password": fields.String(required=True),
+        "role_name": fields.String(choices=[RoleEnum.ADMIN, RoleEnum.USER]),
     },
 )
 
