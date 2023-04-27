@@ -2,7 +2,7 @@
 User schema
 """
 
-from marshmallow import fields, ValidationError, validates, post_load
+from marshmallow import fields, ValidationError, validates, post_load, post_dump
 from marshmallow_sqlalchemy import (
     SQLAlchemyAutoSchema,
 )
@@ -33,6 +33,13 @@ class UserSchema(SQLAlchemyAutoSchema):
         data["role"] = role_enum.value if role_enum else None
         return data
 
+    @post_dump
+    def dump_role_name(self, data, **kwargs):  # pylint: disable=unused-argument
+        """dump role value"""
+        data["role_name"] = RoleEnum(data["role"]).name
+        del data["role"]
+        return data
+
     class Meta:
         """
         User model class
@@ -41,4 +48,4 @@ class UserSchema(SQLAlchemyAutoSchema):
         model = UserModel
         include_relationships = True
         load_instance = True
-        exclude = ("user_id",)  # exclude user_id from serialization
+        exclude = ("user_id",)  # exclude fields from serialization
