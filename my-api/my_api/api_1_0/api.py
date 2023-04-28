@@ -10,6 +10,17 @@ from .user.resources import user_ns, User, UserList, UserLogin
 
 api_1_0_app = Blueprint("api_1_0", __name__)
 
+# Add JWT authorization header for swagger
+authorizations = {
+    "jwt": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "JWT authorization token, Example: 'Bearer JWT'",
+        "value": "Bearer {JWT}",
+    }
+}
+
 
 api = Api(
     api_1_0_app,
@@ -17,6 +28,7 @@ api = Api(
     title="Boilerplate API",
     description="Boilerplate API Platform",
     validate=True,
+    authorizations=authorizations,
 )
 
 # User resources

@@ -15,7 +15,7 @@ class UserSchema(SQLAlchemyAutoSchema):
     User schema
     """
 
-    user_uid = fields.String(dump_only=True)  # read-only field
+    user_uuid = fields.String(dump_only=True)  # read-only field
     password = fields.String(load_only=True)  # write-only field
     role_name = fields.String(required=False)
 
@@ -36,7 +36,7 @@ class UserSchema(SQLAlchemyAutoSchema):
     @post_dump
     def dump_role_name(self, data, **kwargs):  # pylint: disable=unused-argument
         """dump role value"""
-        data["role_name"] = RoleEnum(data["role"]).name
+        data["role_name"] = RoleEnum(data["role"]).name.lower()
         del data["role"]
         return data
 

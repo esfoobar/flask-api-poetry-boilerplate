@@ -9,12 +9,14 @@ from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
+    get_jwt,
     set_access_cookies,
     set_refresh_cookies,
 )
 
 from my_api.application import db
 from my_api.api_1_0.utils import paginate_metadata_object
+from my_api.api_1_0.decorators import token_required
 from .models import UserModel, RoleEnum
 from .schema import UserSchema
 
@@ -90,8 +92,11 @@ def check_username_exists(username):
 class User(Resource):
     """Individual User endpoints"""
 
+    @token_required
+    @user_ns.doc(security="apiKey")
     def get(self, user_uuid):
         """Get user by id"""
+        user = get_jwt()
         user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         if user_data:
             return user_schema.dump(user_data)
@@ -210,12 +215,18 @@ class UserLogin(Resource):
             return {"message": "Invalid credentials"}, 401
 
         # create jwt access token
-        access_token = create_access_token(identity=user.email, fresh=True)
+        additional_claims = {
+            "role_name": RoleEnum(user.role).name.lower(),
+            "user_uuid": user.user_uuid,
+        }
+        access_token = create_access_token(
+            identity=user.email, additional_claims=additional_claims, fresh=True
+        )
         refresh_token = create_refresh_token(identity=user.email)
 
         response = jsonify(
             {
-                "id": user.user_id,
+                "user_uuid": user.user_uuid,
                 "access_token": access_token,
                 "refresh_token": refresh_token,
             }
