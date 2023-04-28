@@ -4,6 +4,7 @@ DB_USERNAME = "app_user"
 DB_PASSWORD = "app_password"
 DATABASE_NAME = "app"
 JWT_SECRET_KEY = "super-secret"
+
 CORS_ORIGINS = "*"
 
 [development]
