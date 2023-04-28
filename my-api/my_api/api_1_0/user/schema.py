@@ -18,6 +18,7 @@ class UserSchema(SQLAlchemyAutoSchema):
     user_uuid = fields.String(dump_only=True)  # read-only field
     password = fields.String(load_only=True)  # write-only field
     role_name = fields.String(required=False)
+    role = fields.Integer(dump_only=True)  # read-only field
 
     @validates("role_name")
     def validate_role(self, value):
@@ -29,8 +30,9 @@ class UserSchema(SQLAlchemyAutoSchema):
     @post_load
     def load_role_name(self, data, **kwargs):  # pylint: disable=unused-argument
         """load role value"""
-        role_enum = RoleEnum.__members__.get(data["role_name"].upper())
-        data["role"] = role_enum.value if role_enum else None
+        if data.get("role_name"):
+            role_enum = RoleEnum.__members__.get(data["role_name"].upper())
+            data["role"] = role_enum.value if role_enum else None
         return data
 
     @post_dump

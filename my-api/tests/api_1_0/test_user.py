@@ -16,6 +16,7 @@ def user_dict():
         "username": "jsmith",
         "email": "jsmith@example.com",
         "password": "test123",
+        "role_name": "user",
     }
 
 
