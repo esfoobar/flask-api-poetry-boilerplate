@@ -14,8 +14,11 @@ RUN apt-get update && apt-get install -y \
     openssl \
     libssl-dev \
     libffi-dev \
+    postgresql-client \
     python3-dev \
-    python3-pip
+    python3-pip \
+    bash-completion \
+    ncurses-term
 
 # Install Python 3.10
 RUN wget https://www.python.org/ftp/python/3.10.0/Python-3.10.0.tgz \

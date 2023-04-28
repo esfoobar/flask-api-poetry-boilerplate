@@ -2,13 +2,22 @@
 User API resources
 """
 
-from flask import request
+from flask import jsonify, request
 from flask_restx import Resource, Namespace, fields, reqparse
+from marshmallow import ValidationError
 from passlib.hash import pbkdf2_sha256
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    get_jwt,
+    set_access_cookies,
+    set_refresh_cookies,
+)
 
 from my_api.application import db
 from my_api.api_1_0.utils import paginate_metadata_object
-from .models import UserModel
+from my_api.api_1_0.decorators import token_required
+from .models import UserModel, RoleEnum
 from .schema import UserSchema
 
 
@@ -24,6 +33,7 @@ user_post_model = user_ns.model(
         "username": fields.String(required=True),
         "email": fields.String(required=True),
         "password": fields.String(required=True),
+        "role_name": fields.String(choices=[RoleEnum.ADMIN, RoleEnum.USER]),
     },
 )
 
@@ -82,16 +92,19 @@ def check_username_exists(username):
 class User(Resource):
     """Individual User endpoints"""
 
-    def get(self, user_id):
+    @token_required
+    @user_ns.doc(security="jwt")
+    def get(self, user_uuid):
         """Get user by id"""
-        user_data = UserModel.query.get(user_id)
+        user = get_jwt()
+        user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         if user_data:
             return user_schema.dump(user_data)
         return {"message": "User not found"}, 404
 
-    def delete(self, user_id):
+    def delete(self, user_uuid):
         """Delete user by id"""
-        user_data = UserModel.query.get(user_id)
+        user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         if user_data:
             db.session.delete(user_data)
             db.session.commit()
@@ -99,9 +112,9 @@ class User(Resource):
         return {"message": "User not found"}, 404
 
     @user_ns.expect(user_put_model)
-    def put(self, user_id):
+    def put(self, user_uuid):
         """Update user by id"""
-        user_data = UserModel.query.get(user_id)
+        user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         user_json = request.get_json()
 
         if not user_data:
@@ -136,7 +149,6 @@ class UserList(Resource):
     """
 
     @user_ns.expect(parser)
-    @user_ns.doc("Get all the Users")
     def get(self):
         """Get all users"""
         args = parser.parse_args()
@@ -150,7 +162,6 @@ class UserList(Resource):
         }, 200
 
     @user_ns.expect(user_post_model)
-    @user_ns.doc("Create a User")
     def post(self):
         """Create new user"""
         user_json = request.get_json()
@@ -167,7 +178,11 @@ class UserList(Resource):
         ):
             return {"message": "Email already exists"}, 400
 
-        user_data = user_schema.load(user_json, session=db.session)
+        try:
+            user_data = user_schema.load(user_json, session=db.session)
+        except ValidationError as err:
+            return {"error": err.messages}, 400
+
         user_data.password = encode_password(user_data.password)
         db.session.add(user_data)
         db.session.commit()
@@ -179,10 +194,46 @@ class UserLogin(Resource):
     """User login resource"""
 
     @user_ns.expect(user_login_model)
-    @user_ns.doc("Login a User")
     def post(self):
         """Login user"""
         user_json = request.get_json()
-        user_data = user_schema.load(user_json, session=db.session)
 
-        return user_schema.dump(user_data), 201
+        # Flask RestX won't handle missing data if there's no marshmallow load
+        # So we need to check for missing data manually
+        if not user_json.get("username"):
+            return {"message": "Missing username parameter"}, 400
+        if not user_json.get("password"):
+            return {"message": "Missing password parameter"}, 400
+
+        # check if user exists in database
+        user = UserModel.query.filter_by(username=user_json["username"]).first()
+        if not user:
+            return {"message": "Invalid credentials"}, 401
+
+        # check if password is correct
+        if not pbkdf2_sha256.verify(user_json["password"], user.password):
+            return {"message": "Invalid credentials"}, 401
+
+        # create jwt access token
+        additional_claims = {
+            "role_name": RoleEnum(user.role).name.lower(),
+            "user_uuid": user.user_uuid,
+        }
+        access_token = create_access_token(
+            identity=user.email, additional_claims=additional_claims, fresh=True
+        )
+        refresh_token = create_refresh_token(identity=user.email)
+
+        response = jsonify(
+            {
+                "user_uuid": user.user_uuid,
+                "access_token": access_token,
+                "refresh_token": refresh_token,
+            }
+        )
+
+        set_access_cookies(response, access_token)
+        set_refresh_cookies(response, refresh_token)
+
+        response.status_code = 200
+        return response

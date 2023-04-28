@@ -8,6 +8,7 @@ from dynaconf import FlaskDynaconf
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 # setup db
 db = SQLAlchemy()
@@ -26,6 +27,23 @@ def create_app(**config_overrides: Any) -> Any:
 
     # apply overrides for tests
     app.config.update(config_overrides)
+
+    # setup CORS
+    CORS(
+        app,
+        resources={
+            r"/v1.0/*": {
+                "origins": app.config["CORS_ORIGINS"],
+                "allow_headers": [
+                    "Content-Type",
+                    "Authorization",
+                    "Access-Control-Allow-Credentials",
+                    "X-CSRF-TOKEN",
+                ],
+            }
+        },
+        supports_credentials=True,
+    )
 
     # setup JWT
     # pylint: disable=unused-variable

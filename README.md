@@ -37,3 +37,8 @@
 
 - To run the applcation, from the root directory just type `docker-compose up`
 - To run tests, run `docker run --rm -it flask-api-poetry-boilerplate poetry run pytest`
+
+## Swagger Docs
+
+- Once the application is running, the Swagger docs are available in [http://localhost:5000/v1.0/](http://localhost:5000/v1.0/)
+- For protected routes, execute a log in and then copy the "access_token" string. Click on the "Authorize" button with the padlock and on the text field, add `Bearer <access_token>`, i.e. the text "Bearer", space and page the "access_token" string.
