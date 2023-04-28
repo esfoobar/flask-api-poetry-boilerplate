@@ -1,5 +1,5 @@
 """
-User API resources
+User user_ns resources
 """
 
 from flask import jsonify, request
@@ -12,16 +12,22 @@ from flask_jwt_extended import (
     get_jwt,
     set_access_cookies,
     set_refresh_cookies,
+    get_jwt_identity,
+    unset_jwt_cookies,
 )
 
 from my_api.application import db
 from my_api.api_1_0.utils import paginate_metadata_object
-from my_api.api_1_0.decorators import token_required
+from my_api.api_1_0.decorators import (
+    token_required,
+    refresh_token_required,
+    admin_required,
+)
 from .models import UserModel, RoleEnum
 from .schema import UserSchema
 
 
-user_ns = Namespace("users", description="User API")
+user_ns = Namespace("users", description="User user_ns")
 
 user_schema = UserSchema()
 user_list_schema = UserSchema(many=True)
@@ -96,7 +102,14 @@ class User(Resource):
     @user_ns.doc(security="apiKey")
     def get(self, user_uuid):
         """Get user by id"""
-        user = get_jwt()
+        jwt_user = get_jwt()
+
+        if (
+            jwt_user["user_uuid"] != user_uuid
+            and jwt_user["role_name"] != RoleEnum.ADMIN.name.lower()
+        ):
+            return {"message": "Access denied"}, 403
+
         user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         if user_data:
             return user_schema.dump(user_data)
@@ -145,10 +158,13 @@ class User(Resource):
 
 class UserList(Resource):
     """
-    Endpoints for User API
+    Endpoints for User user_ns
     """
 
+    @token_required
+    @admin_required
     @user_ns.expect(parser)
+    @user_ns.doc(security="apiKey")
     def get(self):
         """Get all users"""
         args = parser.parse_args()
@@ -237,3 +253,42 @@ class UserLogin(Resource):
 
         response.status_code = 200
         return response
+
+
+@user_ns.route("/check")
+class UserCheckTokenEndpoint(Resource):
+    """Check if JWT Token is still valid"""
+
+    @token_required
+    def get(self):
+        """Check JWT Token"""
+        return {}, 200
+
+
+@user_ns.route("/refresh")
+class UserRefreshTokenEndpoint(Resource):
+    """Refresh JWT Token"""
+
+    @refresh_token_required
+    def post(self):
+        """Get a new access JWT Token with a refresh JWT Token"""
+        current_user = get_jwt_identity()
+        access_token = create_access_token(
+            identity=current_user, fresh=False
+        )  # mark the access token as not fresh
+        # to secure higly sensitive endpoints
+        # using @jwt_required(fresh=True)
+        response = jsonify({"access_token": access_token})
+        response.status_code = 200
+        return response
+
+
+@user_ns.route("/logout")
+class UserLogoutEndpoint(Resource):
+    """Logout user"""
+
+    def post(self):
+        """Logout user"""
+        resp = jsonify({})
+        unset_jwt_cookies(resp)
+        return resp

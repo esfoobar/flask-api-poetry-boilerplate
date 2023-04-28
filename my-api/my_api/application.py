@@ -2,6 +2,7 @@
 Main Flask Application
 """
 
+from datetime import timedelta
 from typing import Any
 from flask import Flask
 from dynaconf import FlaskDynaconf
@@ -46,8 +47,9 @@ def create_app(**config_overrides: Any) -> Any:
     )
 
     # setup JWT
-    # pylint: disable=unused-variable
-    jwt = JWTManager(app)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
+    jwt = JWTManager(app)  # pylint: disable=unused-variable
 
     # initialize db
     db.init_app(app)
