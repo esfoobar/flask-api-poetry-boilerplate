@@ -4,10 +4,7 @@ JWT Decorators
 
 from functools import wraps
 from flask_jwt_extended.exceptions import CSRFError, NoAuthorizationError
-from flask_jwt_extended import (
-    get_jwt_identity,
-)
-from flask_jwt_extended import verify_jwt_in_request
+from flask_jwt_extended import get_jwt, verify_jwt_in_request
 import jwt
 from werkzeug.exceptions import BadRequest
 
@@ -59,7 +56,7 @@ def admin_required(fn):
 
     @wraps(fn)
     def wrapper(*args, **kwargs):
-        jwt_user = get_jwt_identity()
+        jwt_user = get_jwt()
         if jwt_user["role_name"] != RoleEnum.ADMIN.name.lower():
             e = BadRequest()
             e.data = {"message": "UNAUThORIZED_USER"}

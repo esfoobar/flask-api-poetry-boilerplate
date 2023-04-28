@@ -164,7 +164,7 @@ class UserList(Resource):
     @token_required
     @admin_required
     @user_ns.expect(parser)
-    @user_ns.doc(security="apiKey")
+    @user_ns.doc(security="jwt")
     def get(self):
         """Get all users"""
         args = parser.parse_args()
