@@ -18,6 +18,7 @@ class UserSchema(SQLAlchemyAutoSchema):
     user_uuid = fields.String(dump_only=True)  # read-only field
     password = fields.String(load_only=True)  # write-only field
     role_name = fields.String(required=False)
+    role = fields.Integer(dump_only=True)  # read-only field
 
     @validates("role_name")
     def validate_role(self, value):
