@@ -93,7 +93,7 @@ class User(Resource):
     """Individual User endpoints"""
 
     @token_required
-    @user_ns.doc(security="apiKey")
+    @user_ns.doc(security="jwt")
     def get(self, user_uuid):
         """Get user by id"""
         user = get_jwt()

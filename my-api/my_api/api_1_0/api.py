@@ -17,7 +17,6 @@ authorizations = {
         "in": "header",
         "name": "Authorization",
         "description": "JWT authorization token, Example: 'Bearer JWT'",
-        "value": "Bearer {JWT}",
     }
 }
 
