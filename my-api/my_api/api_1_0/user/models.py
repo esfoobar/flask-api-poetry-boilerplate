@@ -3,6 +3,7 @@ User model
 """
 import uuid
 import enum
+from sqlalchemy import event
 
 from my_api.application import db
 
@@ -25,12 +26,7 @@ class UserModel(db.Model):
     __tablename__ = "user"
 
     user_id = db.Column(db.Integer, primary_key=True)
-    user_uuid = db.Column(
-        db.String,
-        unique=True,
-        nullable=False,
-        default=str(uuid.uuid4()),
-    )
+    user_uuid = db.Column(db.String, unique=True, nullable=False)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     role = db.Column(db.Integer, nullable=False, default=RoleEnum.USER.value)
@@ -38,3 +34,13 @@ class UserModel(db.Model):
 
     def __repr__(self):
         return f"<User {UserModel.username}>"
+
+
+def generate_uuid(
+    mapper, connection, target
+):  # pylint: disable=unused-argument
+    """generate uuid"""
+    target.user_uuid = str(uuid.uuid4())
+
+
+event.listen(UserModel, "before_insert", generate_uuid, propagate=True)

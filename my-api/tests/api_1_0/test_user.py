@@ -4,19 +4,31 @@ Test User API v1.0
 
 import json
 
+from my_api.api_1_0.user.models import RoleEnum
+
 
 def headers():
     """json headers for all requests"""
     return {"Content-Type": "application/json"}
 
 
-def user_dict():
-    """user dict for all requests"""
+def admin_dict():
+    """user dict for admin user"""
     return {
-        "username": "jsmith",
-        "email": "jsmith@example.com",
-        "password": "test123",
-        "role_name": "user",
+        "username": "admin",
+        "email": "admin@example.com",
+        "password": "12345",
+        "role_name": RoleEnum.ADMIN.name,
+    }
+
+
+def user_dict():
+    """user dict for regular user"""
+    return {
+        "username": "user1",
+        "email": "user1@example.com",
+        "password": "12345",
+        "role_name": RoleEnum.USER.name,
     }
 
 
