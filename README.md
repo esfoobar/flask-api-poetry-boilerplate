@@ -9,19 +9,24 @@
   - Start a terminal
   - Install poetry using `brew install poetry`
 
-### First Migration
-
-- You need a postgres server up and running with the right credentials. The fastest way is to run the Docker postgres database
-- Change directory to "my_api": `cd my_api`
-- Run the first migration with `poetry run flask db upgrade` or `docker run --rm -it flask-api-poetry-boilerplate poetry run flask db upgrade`
-  - Subsequent migrations after models changes can be run with `poetry run flask db migrate -m "added app table field"`.
-
 ## Running the application
 
 - Start a terminal
 - Navigate to the `my-api/my_api` directory
 - Install the packages using `poetry install`
 - Then run `poetry run flask run`
+- Note: You need a local Postgres database instance running
+
+### First Migration
+
+- You need a postgres server up and running with the right credentials. The fastest way is to run the Docker postgres database
+- Change directory to "my_api": `cd my_api`
+- Run the first migration with `poetry run flask db upgrade` or `docker run --rm -it  poetry run flask db upgrade`
+  - Subsequent migrations after models changes can be run with `poetry run flask db migrate -m "added app table field"`.
+
+## Creating test users
+
+- After the migration is applied, run `poetry run python db_init.py`
 
 ## Working with VSCode
 
@@ -32,6 +37,10 @@
 - To run the Flask server on port 5000 on macOS, you need to disable the 'AirPlay Receiver' service from System Preferences > Airdrop & Handoff.
 - Black formatter is used as well as Pylint
 - Testing can be started from the testing navbar for breakpoint interaction
+
+### DevContainer
+
+- If you have the DevContainer VSCode extension, you will be asked if you want to open the folder in a Docker container automatically
 
 ## Working with Docker
 

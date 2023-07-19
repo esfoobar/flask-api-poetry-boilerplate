@@ -102,6 +102,7 @@ class User(Resource):
     @user_ns.doc(security="jwt")
     def get(self, user_uuid):
         """Get user by id"""
+
         jwt_user = get_jwt()
 
         if (
@@ -115,8 +116,12 @@ class User(Resource):
             return user_schema.dump(user_data)
         return {"message": "User not found"}, 404
 
+    @token_required
+    @admin_required
+    @user_ns.doc(security="jwt")
     def delete(self, user_uuid):
         """Delete user by id"""
+
         user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         if user_data:
             db.session.delete(user_data)
@@ -124,9 +129,20 @@ class User(Resource):
             return {"message": "User deleted successfully"}, 200
         return {"message": "User not found"}, 404
 
+    @token_required
+    @user_ns.doc(security="jwt")
     @user_ns.expect(user_put_model)
     def put(self, user_uuid):
         """Update user by id"""
+
+        jwt_user = get_jwt()
+
+        if (
+            jwt_user["user_uuid"] != user_uuid
+            and jwt_user["role_name"] != RoleEnum.ADMIN.name.lower()
+        ):
+            return {"message": "Access denied"}, 403
+
         user_data = UserModel.query.filter_by(user_uuid=user_uuid).first()
         user_json = request.get_json()
 

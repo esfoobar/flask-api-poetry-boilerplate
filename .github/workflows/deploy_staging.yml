@@ -34,27 +34,20 @@ jobs:
           - 5432:5432
     steps:
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Print variables to help debug
         uses: hmarr/debug-action@v2
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Print Poetry settings
+        run: poetry show -v
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - run: pip install -U wheel
-      - name: Load cached Poetry installation
-        id: cached-poetry-dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pypoetry/virtualenvs
-          key: env-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ hashFiles('.github/workflows/deploy_be_staging.yml') }}
-      - name: Install poetry
-        uses: snok/install-poetry@v1.3.3
-      - name: Print Poetry settings
-        run: poetry show -v
+          cache: "poetry"
       - name: Install dependencies
         run: poetry install
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       - name: Run Black
         run: |
           poetry run black --check --line-length=80 .
