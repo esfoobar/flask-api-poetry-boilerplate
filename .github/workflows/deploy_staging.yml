@@ -53,7 +53,7 @@ jobs:
           poetry run black --check --line-length=80 .
       - name: Run pylint
         run: |
-          poetry run pylint my_app/*.py
+          poetry run pylint my_api/*.py
       - name: Run tests
         run: |
           poetry run pytest
