@@ -1,6 +1,7 @@
 """
 Initialize database with users
 """
+from passlib.hash import pbkdf2_sha256
 
 from my_api.application import create_app, db
 from my_api.api_1_0.user.models import UserModel, RoleEnum
@@ -36,7 +37,7 @@ def create_initial_users():
             new_user = UserModel(
                 username=user["username"],
                 email=user["email"],
-                password=user["password"],
+                password=pbkdf2_sha256.hash(user["password"]),
                 role=user["role"],
             )
             db.session.add(new_user)
