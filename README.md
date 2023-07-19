@@ -21,7 +21,7 @@
 
 - You need a postgres server up and running with the right credentials. The fastest way is to run the Docker postgres database
 - Change directory to "my_api": `cd my_api`
-- Run the first migration with `poetry run flask db upgrade` or `docker run --rm -it flask-api-poetry-boilerplate poetry run flask db upgrade`
+- Run the first migration with `poetry run flask db upgrade` or `docker run --rm -it  poetry run flask db upgrade`
   - Subsequent migrations after models changes can be run with `poetry run flask db migrate -m "added app table field"`.
 
 ## Creating test users

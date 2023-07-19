@@ -36,9 +36,7 @@ class UserModel(db.Model):
         return f"<User {UserModel.username}>"
 
 
-def generate_uuid(
-    mapper, connection, target
-):  # pylint: disable=unused-argument
+def generate_uuid(mapper, connection, target):  # pylint: disable=unused-argument
     """generate uuid"""
     target.user_uuid = str(uuid.uuid4())
 
