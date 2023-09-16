@@ -7,7 +7,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./:/my-api
+      - ./my-api:/my-api
     depends_on:
       - db
     stdin_open: true
